@@ -2,6 +2,7 @@ package com.myshop.productservice.service;
 
 import com.myshop.productservice.entity.Product;
 import com.myshop.productservice.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,11 @@ public class ProductService {
         return repository.save(product);
     }
 
+    public void saveAll(List<Product> products) {
+        repository.saveAll(products);
+    }
+
+
     public List<Product> getAllProducts() {
         return repository.findAll();
     }
@@ -28,6 +34,7 @@ public class ProductService {
         return repository.findById(id).orElseThrow();
     }
 
+    @Transactional
     public void reduceStock(Long id, int quantity) {
         Product product = getProductById(id);
         if (product.getStock() < quantity) {
@@ -36,4 +43,8 @@ public class ProductService {
         product.setStock(product.getStock() - quantity);
         repository.save(product);
     }
+    public void deleteProduct(Long id) {
+        repository.deleteById(id);
+    }
+
 }

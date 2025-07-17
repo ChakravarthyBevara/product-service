@@ -2,7 +2,7 @@ package com.myshop.productservice.controller;
 
 import com.myshop.productservice.entity.Product;
 import com.myshop.productservice.service.ProductService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +22,15 @@ public class ProductController {
         return service.saveProduct(product);
     }
 
+    @PostMapping("/bulk-create")
+    public ResponseEntity<String> createProducts(@RequestBody List<Product> products) {
+        service.saveAll(products);
+        return ResponseEntity.ok("Products created successfully.");
+    }
+
+
     @GetMapping
+
     public List<Product> getAll() {
         return service.getAllProducts();
     }
@@ -36,5 +44,12 @@ public class ProductController {
     public void reduceStock(@PathVariable Long id, @RequestParam int quantity) {
         service.reduceStock(id, quantity);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
+        service.deleteProduct(id);
+        return ResponseEntity.ok("Product deleted successfully.");
+    }
+
 }
 
