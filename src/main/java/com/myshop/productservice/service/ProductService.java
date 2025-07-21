@@ -3,7 +3,6 @@ package com.myshop.productservice.service;
 import com.myshop.productservice.entity.Product;
 import com.myshop.productservice.repository.ProductRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,6 +42,14 @@ public class ProductService {
         product.setStock(product.getStock() - quantity);
         repository.save(product);
     }
+
+    public Product increaseStock(Long id, int quantity) {
+        Product product = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setStock(product.getStock() + quantity);
+        return repository.save(product);
+    }
+
     public void deleteProduct(Long id) {
         repository.deleteById(id);
     }
